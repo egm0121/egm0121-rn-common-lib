@@ -1,0 +1,19 @@
+{
+  "name": "egm0121-rn-common-lib",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/egm0121/egm0121-rn-common-lib.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/egm0121/egm0121-rn-common-lib/issues"
+  },
+  "homepage": "https://github.com/egm0121/egm0121-rn-common-lib#readme"
+}
