@@ -29,7 +29,7 @@ export function setCustomTheme(customObj) {
 };
 
 const ThemeContext = React.createContext(themeVariables);
-const ConnectTheme = (props) => {
+const ThemeProvider = (props) => {
   return <ThemeContext.Provider value={themeVariables}>
   {props.children}
   </ThemeContext.Provider>
@@ -42,6 +42,6 @@ const withTheme = (Component) => {
   }</ThemeContext.Consumer>
   }
 }
-export { ThemeContext, withTheme, ConnectTheme };
+export { ThemeContext, withTheme, ThemeProvider };
 
 export default themeVariables;
