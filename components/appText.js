@@ -1,17 +1,17 @@
 import React, { PropTypes, Component } from 'react';
 import { Text } from 'react-native';
-import THEME from '../styles/variables';
+import { withTheme } from '../styles/variables';
 
-export default function AppText(props){
+export default withTheme(function AppText(props){
   const initialStyle = {
     fontFamily: props.bold ?
-      THEME.appContentBoldFontFamily : THEME.appContentFontFamily
+      props.theme.appContentBoldFontFamily : props.theme.appContentFontFamily,
   };
   let styles = [];
   if(props.style){
     styles = Array.isArray(props.style) ? props.style : [props.style];
   }
   return <Text {...props} style={[initialStyle].concat(styles)} >
-  {props.children}
+  {props.children + ' font: '+props.theme.appContentFontFamily}
   </Text>
-}
+});

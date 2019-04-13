@@ -9,9 +9,10 @@ import {
   View,
   TouchableOpacity
 } from 'react-native';
-import THEME from '../styles/variables';
+import { withTheme } from '../styles/variables';
 
-class FilterInput extends Component{
+class FilterInput extends Component {
+  
   constructor(props){
     super(props);
     this._onBlur = this._onBlur.bind(this);
@@ -19,6 +20,7 @@ class FilterInput extends Component{
     this.state = {
       isFocused : false
     }
+    this.styles = this.getStyles();
   }
   _onFocus(...args){
     this.setState({isFocused:true});
@@ -35,20 +37,20 @@ class FilterInput extends Component{
   render(){
     let isEmpty = !this.props.value || this.props.value.length == 0;
     let clearButtonOpacity = isEmpty ? 0 : 1;
-    let inputViewStyle = [styles.filterInputView,this.props.inputViewStyle];
-    let inputStyle = [styles.filterInput,this.props.inputStyle];
+    let inputViewStyle = [this.styles.filterInputView,this.props.inputViewStyle];
+    let inputStyle = [this.styles.filterInput,this.props.inputStyle];
     if(this.state.isFocused){
-      inputViewStyle.push(styles.focusedFilterInputView);
+      inputViewStyle.push(this.styles.focusedFilterInputView);
     }
     if(!isEmpty){
-      inputViewStyle.push(styles.activeFilter);
-      inputStyle.push(styles.activeFilterInput);
+      inputViewStyle.push(this.styles.activeFilter);
+      inputStyle.push(this.styles.activeFilterInput);
     }
     return (
        <View style={inputViewStyle}>
-         { !isEmpty ? <View style={[styles.clearAction]}>
+         { !isEmpty ? <View style={[this.styles.clearAction]}>
            <TouchableOpacity onPress={this.props.onClearFilter} >
-             <Text style={styles.clearActionText}>✕</Text>
+             <Text style={this.styles.clearActionText}>✕</Text>
            </TouchableOpacity>
          </View> :  null}
          <TextInput
@@ -62,52 +64,54 @@ class FilterInput extends Component{
          />
        </View>);
   }
-}
-
-const styles = StyleSheet.create({
-  filterInput : {
-    height: 30,
-    color: THEME.mainColor,
-    paddingLeft: 15,
-    paddingRight: 30,
-    lineHeight:20,
-    fontSize: 15
-  },
-  activeFilter:{
-    backgroundColor : THEME.tabBarBorderColor
-  },
-  activeFilterInput:{
-    color: THEME.mainHighlightColor
-  },
-  filterInputView :{
-    height:30,
-    margin:10,
-    borderRadius:20,
-    backgroundColor : THEME.contentBorderColor
-  },
-  focusedFilterInputView:{
-  },
-  focusedFilterInput:{
-    color: THEME.mainHighlightColor
-  },
-  clearAction:{
-    position:'absolute',
-    right:5,
-    top:0,
-    zIndex:10,
-    height:30,
-    width:30
-  },
-  clearActionText:{
-    color: THEME.mainColor,
-    fontSize:20,
-    lineHeight:28,
-    textAlign:'center'
+  getStyles(){
+    const THEME = this.props.theme;
+    return StyleSheet.create({
+      filterInput : {
+        height: 30,
+        color: THEME.mainColor,
+        paddingLeft: 15,
+        paddingRight: 30,
+        lineHeight:20,
+        fontSize: 15
+      },
+      activeFilter:{
+        backgroundColor : THEME.tabBarBorderColor
+      },
+      activeFilterInput:{
+        color: THEME.mainHighlightColor
+      },
+      filterInputView :{
+        height:30,
+        margin:10,
+        borderRadius:20,
+        backgroundColor : THEME.contentBorderColor
+      },
+      focusedFilterInputView:{
+      },
+      focusedFilterInput:{
+        color: THEME.mainHighlightColor
+      },
+      clearAction:{
+        position:'absolute',
+        right:5,
+        top:0,
+        zIndex:10,
+        height:30,
+        width:30
+      },
+      clearActionText:{
+        color: THEME.mainColor,
+        fontSize:20,
+        lineHeight:28,
+        textAlign:'center'
+      }
+    });
   }
-});
+}
 
 FilterInput.propTypes = {
   onClearFilter: PropTypes.func
 };
 
-export default FilterInput;
+export default withTheme(FilterInput);

@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/egm0121/egm0121-rn-common-lib/issues"
   },
-  "homepage": "https://github.com/egm0121/egm0121-rn-common-lib#readme"
+  "homepage": "https://github.com/egm0121/egm0121-rn-common-lib#readme",
+  "dependencies": {
+    "prop-types": "^15.7.2"
+  }
 }
