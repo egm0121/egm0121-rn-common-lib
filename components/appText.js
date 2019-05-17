@@ -12,6 +12,6 @@ export default withTheme(function AppText(props){
     styles = Array.isArray(props.style) ? props.style : [props.style];
   }
   return <Text {...props} style={[initialStyle].concat(styles)} >
-  {props.children + ' font: '+props.theme.appContentFontFamily}
+  {props.children}
   </Text>
 });
