@@ -10,8 +10,20 @@ import {
   View,
   TouchableOpacity
 } from 'react-native';
-import THEME from '../styles/variables';
+import { withThemedStyles } from '../styles/variables';
 import AppText from './appText';
+
+const renderTypeMap = {
+  'error' : {
+    icon : '✕'
+  },
+  'info' :{
+    icon : '!'
+  },
+  'success':{
+    icon : '✓'
+  }
+}
 class NotificationOverlay extends Component {
   constructor(props){
     super(props);
@@ -24,6 +36,7 @@ class NotificationOverlay extends Component {
     },this.props.timeout);
   }
   render() {
+    const styles = this.props.themeStyles;
     const typeIcon = NotificationOverlay.renderForType[this.props.type].icon;
     return (
         <View style={styles.notificationContainer} >
@@ -39,17 +52,7 @@ NotificationOverlay.types = {
   info : 'info',
   success : 'success'
 };
-NotificationOverlay.renderForType = {
-  'error' : {
-    icon : '✕'
-  },
-  'info' :{
-    icon : '!'
-  },
-  'success':{
-    icon : '✓'
-  }
-},
+NotificationOverlay.renderForType = renderTypeMap;
 NotificationOverlay.defaultProps = {
   timeout : 1500,
   type : NotificationOverlay.types.info
@@ -62,31 +65,33 @@ NotificationOverlay.propTypes = {
   onClearNotification: PropTypes.func.isRequired
 };
 
-const styles = StyleSheet.create({
-  notificationContainer:{
-    width:180,
-    height:180,
-    borderRadius:10,
-    paddingHorizontal:10,
-    marginVertical:20,
-    alignItems:'center',
-    justifyContent:'center',
-    backgroundColor:THEME.notifyBgColor,
-    shadowColor:'rgb(0,0,0)',
-    shadowRadius:20,
-    //shadowOpacity:1
-  },
-  iconText : {
-    textAlign:'center',
-    fontSize:60,
-    lineHeight:60,
-    color: THEME.mainHighlightColor,
-  },
-  messageText : {
-    color: THEME.mainHighlightColor,
-    textAlign:'center',
-    fontSize: 18
-  }
-});
+const mapThemeToStyles = (THEME) => {
+  return StyleSheet.create({
+    notificationContainer:{
+      width:180,
+      height:180,
+      borderRadius:10,
+      paddingHorizontal:10,
+      marginVertical:20,
+      alignItems:'center',
+      justifyContent:'center',
+      backgroundColor:THEME.notifyBgColor,
+      shadowColor:'rgb(0,0,0)',
+      shadowRadius:20,
+      //shadowOpacity:1
+    },
+    iconText : {
+      textAlign:'center',
+      fontSize:60,
+      lineHeight:60,
+      color: THEME.mainHighlightColor,
+    },
+    messageText : {
+      color: THEME.mainHighlightColor,
+      textAlign:'center',
+      fontSize: 18
+    }
+  });
+};
 
-export default NotificationOverlay;
+export default withThemedStyles(mapThemeToStyles)(NotificationOverlay);

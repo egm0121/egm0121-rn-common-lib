@@ -42,6 +42,15 @@ const withTheme = (Component) => {
   }</ThemeContext.Consumer>
   }
 }
-export { ThemeContext, withTheme, ThemeProvider };
+const withThemedStyles = (fnStyles) => (Component) => {
+  return ( props ) => {
+    return <ThemeContext.Consumer>{(theme) => {
+      const themeStyles = fnStyles(theme);
+      return <Component {...props} theme={theme} themeStyles={themeStyles} />
+    }
+  }</ThemeContext.Consumer>
+  }
+}
+export { ThemeContext, withTheme, withThemedStyles, ThemeProvider };
 
 export default themeVariables;
