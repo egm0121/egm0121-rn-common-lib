@@ -4,6 +4,7 @@ import { withTheme } from '../styles/variables';
 
 export default withTheme(function AppText(props){
   const initialStyle = {
+    fontWeight: props.bold ? '600' : 'normal',
     fontFamily: props.bold ?
       props.theme.appContentBoldFontFamily : props.theme.appContentFontFamily,
   };

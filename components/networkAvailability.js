@@ -1,6 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
 import {
-  AppRegistry,
   NetInfo
 } from 'react-native';
 let networkStateCache = {
@@ -14,21 +13,23 @@ class NetworkAvailability extends Component{
     this.updateNetworkState = this.updateNetworkState.bind(this);
   }
   componentWillMount(){
-    NetInfo.fetch().then((connectionInfo) => {
+    NetInfo.getConnectionInfo().then((connectionInfo) => {
       this.updateNetworkState(connectionInfo);
     });
     NetInfo.addEventListener(
-      'change',
+      'connectionChange',
       this.updateNetworkState
     );
   }
   componentWillUnmount() {
     NetInfo.removeEventListener(
-      'change',
+      'connectionChange',
       this.updateNetworkState
     );
   }
-  updateNetworkState(connType){
+  updateNetworkState(connInfo){
+    console.log('update network state',connInfo);
+    const connType = connInfo.type;
     this.setState({
       isOnline: connType != 'none',
       connectionInfo: connType
@@ -39,7 +40,4 @@ class NetworkAvailability extends Component{
     return this.props.children(this.state.isOnline,this.state.connectionInfo);
   }
 }
-NetworkAvailability.propTypes = {
-
-};
 export default NetworkAvailability;
