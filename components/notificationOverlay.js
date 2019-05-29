@@ -2,7 +2,8 @@
  * @flow
  */
 
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import { PropTypes } from 'prop-types';
 import {
   AppRegistry,
   StyleSheet,
@@ -37,7 +38,7 @@ class NotificationOverlay extends Component {
   }
   render() {
     const styles = this.props.themeStyles;
-    const typeIcon = NotificationOverlay.renderForType[this.props.type].icon;
+    const typeIcon = renderTypeMap[this.props.type].icon;
     return (
         <View style={styles.notificationContainer} >
           <AppText style={styles.iconText}>{typeIcon}</AppText>

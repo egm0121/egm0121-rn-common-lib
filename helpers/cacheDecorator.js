@@ -1,8 +1,9 @@
 
+import { isPojo } from './utils';
 export function CacheDecorator() {
   let that = this;
   this.fnCache = {};
-  this.timeoutRef = {};
+  this.expiryMap = {};
   this.uniqFuncId = 0;
   /* private helpers */
   let isObject = (value) => value !== null && typeof value === 'object';
@@ -12,7 +13,7 @@ export function CacheDecorator() {
     return prom && isObject(prom) && 'then' in prom;
   };
 
-  let rewrapPromise = function(prom){
+  let breakObjectReferences = function(prom){
     if( isPromiseLike(prom) ){
       return new Promise((res,rej) => {
         prom.then((value) => {
@@ -33,6 +34,7 @@ export function CacheDecorator() {
   };
   let argsSerializer = (e) => {
     if(e === undefined || e === null ) return 'null';
+    if(isObject(e) && !isPojo(e))return '';
     return isObject(e) ? JSON.stringify(e) : e.toString();
   };
   let startsWith = (ns) => (i) => ns.indexOf(i) === 0;
@@ -48,17 +50,19 @@ export function CacheDecorator() {
   }
 
   this.getCache = function(key){
-    let prefix = key.split('-')[0];
+    const keyExpiry = this.expiryMap[key];
+    if (keyExpiry && Date.now() > keyExpiry) {
+      console.log('expired key , will delete', key);
+      delete this.expiryMap[key];
+      this.delCache(key);
+      return false;
+    }
     return key in  this.fnCache ?  this.fnCache[key] : false;
   };
 
   this.setCache = function(key,val,timeout = 0){
     if(parseInt(timeout) > 0){
-      if(key in this.timeoutRef) clearTimeout(this.timeoutRef[key]);
-      this.timeoutRef[key] = setTimeout(() => {
-        console.log('cacheDecorator','cache expire for key '+key)
-        this.delCache(key);
-      },timeout);
+      this.expiryMap[key] = Date.now() + timeout; 
     }
     return this.fnCache[key] = val;
   };
@@ -74,10 +78,6 @@ export function CacheDecorator() {
       invalidKeys = Object.keys(this.fnCache);
     }
     invalidKeys.map((key) => {
-      if(key in this.timeoutRef){
-        clearTimeout(this.timeoutRef[key]);
-        delete this.timeoutRef[key];
-      }
       that.fnCache[key] = undefined;
       delete that.fnCache[key];
     });
@@ -90,24 +90,23 @@ export function CacheDecorator() {
       let key = id + '-' + args.map(argsSerializer).join('-');
       let cachedVal = that.getCache(key);
 
-      if (!cachedVal ){
+      if (!cachedVal){
           //cache the original
         console.log('cacheDecorator','cache miss for key : ' + key);
         cachedVal = func(...args);
-        this.setCache(key,cachedVal,timeout);
+        if(isPromiseLike(cachedVal)){
+          cachedVal.then(() => {
+            this.setCache(key,cachedVal,timeout);
+          }).
+          catch(() => console.log('rejected promise, will not cache',key)); 
+        }
       } else {
         console.log('cacheDecorator','cache hit for key : ' + key);
       }
-      //rewrapPromise, on promise or object will
+      //breakObjectReferences, on promise or object will
       //return a copy of the cached value
       //so that the original reference to the cached object doesn't leak.
-      let valueOrPromise = rewrapPromise(cachedVal);
-      if(isPromiseLike(valueOrPromise)){
-        valueOrPromise.catch(() => {
-          console.log('rejected promise, delCache',key);
-          this.delCache(key);
-        })
-      }
+      let valueOrPromise = breakObjectReferences(cachedVal);
       return valueOrPromise;
     };
   };
