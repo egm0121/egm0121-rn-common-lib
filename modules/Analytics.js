@@ -40,7 +40,7 @@ let AnalyticsService = {
        );
     this.ga.send(screenView);
   },
-  sendNestedScreenView(subView){
+  sendNestedScreenView(subView, async = false){
     let screenName = [this.currentRootScreen, subView].join(' - ');
     let screenView = new GAHits.ScreenView(
       this.trackingAppName,
@@ -48,7 +48,11 @@ let AnalyticsService = {
       DeviceInfo.getReadableVersion(),
       DeviceInfo.getBundleId()
     );
-    this.ga.send(screenView);
+    if(async){ 
+      setTimeout(() => this.ga.send(screenView),100)
+    } else {
+      this.ga.send(screenView);
+    }
   },
   sendEvent({category,action,label,value,dimensions}){
     if(!this.ga){

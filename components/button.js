@@ -5,12 +5,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   StyleSheet,
-  Text,
-  View,
   Image,
   TouchableOpacity
 } from 'react-native';
 import {ucFirst} from '../helpers/formatters';
+
+const hitSlop =  {
+  top: 20,
+  left: 10,
+  bottom: 20, 
+  right: 10};
+
 function Button(props){
   let sizes = ['tiny','small','big','bigger','huge'];
   let buttonContainerStyle = [styles.buttonContainer];
@@ -23,12 +28,14 @@ function Button(props){
   if(props.disabled){
     buttonIconStyle.push(styles.disabledButton);
   }
-  return <TouchableOpacity style={buttonContainerStyle}
-          onPress={!props.disabled ? props.onPressed : ()=>{}}>
-          <Image style={buttonIconStyle} source={props.image} resizeMode={'cover'}/>
-      </TouchableOpacity>;
+  return <TouchableOpacity 
+    hitSlop={hitSlop}
+    style={buttonContainerStyle}
+    onPress={!props.disabled ? props.onPressed : ()=>{}}>
+      <Image style={buttonIconStyle} source={props.image} resizeMode={'cover'}/>
+  </TouchableOpacity>;
 }
-Button.propTypes ={
+Button.propTypes = {
   'onPressed' : PropTypes.func.isRequired,
   'image' : PropTypes.oneOfType([
     PropTypes.object,
