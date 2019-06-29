@@ -1,9 +1,11 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   AppRegistry,
   StyleSheet,
   Text,
   TextInput,
+  Platform,
   ListView,
   ActivityIndicator,
   View,
@@ -11,8 +13,7 @@ import {
 } from 'react-native';
 import { withTheme } from '../styles/variables';
 
-class FilterInput extends Component {
-  
+class FilterInput extends Component{
   constructor(props){
     super(props);
     this._onBlur = this._onBlur.bind(this);
@@ -20,7 +21,6 @@ class FilterInput extends Component {
     this.state = {
       isFocused : false
     }
-    this.styles = this.getStyles();
   }
   _onFocus(...args){
     this.setState({isFocused:true});
@@ -34,37 +34,7 @@ class FilterInput extends Component {
       this.props.onBlur(...args);
     }
   }
-  render(){
-    let isEmpty = !this.props.value || this.props.value.length == 0;
-    let clearButtonOpacity = isEmpty ? 0 : 1;
-    let inputViewStyle = [this.styles.filterInputView,this.props.inputViewStyle];
-    let inputStyle = [this.styles.filterInput,this.props.inputStyle];
-    if(this.state.isFocused){
-      inputViewStyle.push(this.styles.focusedFilterInputView);
-    }
-    if(!isEmpty){
-      inputViewStyle.push(this.styles.activeFilter);
-      inputStyle.push(this.styles.activeFilterInput);
-    }
-    return (
-       <View style={inputViewStyle}>
-         { !isEmpty ? <View style={[this.styles.clearAction]}>
-           <TouchableOpacity onPress={this.props.onClearFilter} >
-             <Text style={this.styles.clearActionText}>✕</Text>
-           </TouchableOpacity>
-         </View> :  null}
-         <TextInput
-           style={inputStyle}
-           placeholder={this.props.placeholder}
-           value={this.props.value}
-           placeholderTextColor={THEME.mainColor}
-           {...this.props}
-           onBlur={this._onBlur}
-           onFocus={this._onFocus}
-         />
-       </View>);
-  }
-  getStyles(){
+  getStyles() {
     const THEME = this.props.theme;
     return StyleSheet.create({
       filterInput : {
@@ -72,8 +42,9 @@ class FilterInput extends Component {
         color: THEME.mainColor,
         paddingLeft: 15,
         paddingRight: 30,
-        lineHeight:20,
-        fontSize: 15
+        paddingVertical: 0,
+        lineHeight: 20,
+        fontSize: 14
       },
       activeFilter:{
         backgroundColor : THEME.tabBarBorderColor
@@ -107,6 +78,37 @@ class FilterInput extends Component {
         textAlign:'center'
       }
     });
+  }
+  render(){
+    let isEmpty = !this.props.value || this.props.value.length == 0;
+    let clearButtonOpacity = isEmpty ? 0 : 1;
+    let styles = this.getStyles();
+    let inputViewStyle = [styles.filterInputView,this.props.inputViewStyle];
+    let inputStyle = [styles.filterInput,this.props.inputStyle];
+    if(this.state.isFocused){
+      inputViewStyle.push(styles.focusedFilterInputView);
+    }
+    if(!isEmpty){
+      inputViewStyle.push(styles.activeFilter);
+      inputStyle.push(styles.activeFilterInput);
+    }
+    return (
+       <View style={inputViewStyle}>
+         { !isEmpty ? <View style={[styles.clearAction]}>
+           <TouchableOpacity onPress={this.props.onClearFilter} >
+             <Text style={styles.clearActionText}>✕</Text>
+           </TouchableOpacity>
+         </View> :  null}
+         <TextInput
+           style={inputStyle}
+           placeholder={this.props.placeholder}
+           value={this.props.value}
+           placeholderTextColor={this.props.theme.mainColor}
+           {...this.props}
+           onBlur={this._onBlur}
+           onFocus={this._onFocus}
+         />
+       </View>);
   }
 }
 
