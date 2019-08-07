@@ -10,7 +10,7 @@ export default {
   },
   enhanceErrorReport(report, error) {
     try {
-      report.metadata = report.metadata || {}
+      report.metadata = report.metadata || {};
       // handle axios failed request errors
       if (error.config && typeof error.config === 'object') {
         // eslint-disable-next-line no-param-reassign
@@ -19,11 +19,11 @@ export default {
           params: error.config.params,
           method: error.config.method,
         };
-      }
-      report.metadata = {
-        ...report.metadata,
-        ...this.errorMetadataCb(report, error)
       } 
+      const extraData = this.errorMetadataCb(report, error);
+      Object.keys(extraData).forEach(dataKey => {
+        report.metadata[dataKey] = extraData[dataKey];
+      });
     } catch (err) {
       console.log('bugsnag failed enhancing of error');
       return true;
