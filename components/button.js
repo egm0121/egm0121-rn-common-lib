@@ -29,11 +29,14 @@ function Button(props){
     buttonIconStyle.push(styles.disabledButton);
   }
   return <TouchableOpacity 
-    hitSlop={hitSlop}
+    hitSlop={props.hitSlop}
     style={buttonContainerStyle}
     onPress={!props.disabled ? props.onPressed : ()=>{}}>
       <Image style={buttonIconStyle} source={props.image} resizeMode={'cover'}/>
   </TouchableOpacity>;
+}
+Button.defaultProps = {
+  hitSlop: hitSlop
 }
 Button.propTypes = {
   'onPressed' : PropTypes.func.isRequired,
