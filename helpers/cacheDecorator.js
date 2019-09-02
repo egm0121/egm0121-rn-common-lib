@@ -1,5 +1,5 @@
-
 import { isPojo } from './utils';
+
 export function CacheDecorator() {
   let that = this;
   this.fnCache = {};
@@ -20,9 +20,7 @@ export function CacheDecorator() {
           let originalPayload = value;
           let cloned = copy(originalPayload);
           res(cloned);
-        }).catch((err) => {
-          rej(err);
-        });
+        }).catch(rej);
       });
     }
 
@@ -83,7 +81,7 @@ export function CacheDecorator() {
     });
   };
 
-  this.withCache = function(func,explicitId,timeout){
+  this.withCache = function(func, explicitId, timeout, returnClones = false){
     let id = explicitId || getUniqCacheId();
 
     return (...args) => {
@@ -106,7 +104,7 @@ export function CacheDecorator() {
       //breakObjectReferences, on promise or object will
       //return a copy of the cached value
       //so that the original reference to the cached object doesn't leak.
-      let valueOrPromise = breakObjectReferences(cachedVal);
+      let valueOrPromise = returnClones ? breakObjectReferences(cachedVal) : valueOrPromise;
       return valueOrPromise;
     };
   };
