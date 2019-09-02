@@ -104,7 +104,7 @@ export function CacheDecorator() {
       //breakObjectReferences, on promise or object will
       //return a copy of the cached value
       //so that the original reference to the cached object doesn't leak.
-      let valueOrPromise = returnClones ? breakObjectReferences(cachedVal) : valueOrPromise;
+      let valueOrPromise = returnClones ? breakObjectReferences(cachedVal) : cachedVal;
       return valueOrPromise;
     };
   };
