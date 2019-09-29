@@ -3,29 +3,29 @@ import { ImageBackground } from 'react-native';
 
 export default class DefaultImageBackground extends React.Component {
   static defaultProps = {
-    source: [],
+    source: null,
     onError: () => {},
+    fallbackSource: null
   }
 
-  state = { current: 0 }
+  state = { useFallback: false }
 
   onError = error => {
     this.props.onError(error);
-    const next = this.state.current + 1;
-    if (next < this.props.source.length) {
-      this.setState({ current: next });
-    }
+    this.setState({ useFallback: true });
   }
   componentDidUpdate(prevProps){
-    if(prevProps.source !== this.props.source){
-      this.setState({current: 0});
+    if( prevProps.source && this.props.source &&
+       prevProps.source.uri !== this.props.source.uri){
+      this.setState({ useFallback: false });
     }
   }
   render() {
-    const { onError, source, ...rest } = this.props;
+    const { onError, source, fallbackSource, ...rest } = this.props;
+    const imageSource = this.state.useFallback ?  fallbackSource : source; 
     return (
       <ImageBackground
-        source={source[this.state.current]}
+        source={imageSource}
         onError={this.onError}
         {...rest}
       />
