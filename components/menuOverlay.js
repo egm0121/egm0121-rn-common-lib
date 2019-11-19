@@ -2,7 +2,7 @@
  * @flow
  */
 
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
 import {
   AppRegistry,
   StyleSheet,
@@ -12,6 +12,8 @@ import {
 } from 'react-native';
 import THEME from '../styles/variables';
 import AppText from './appText';
+import PropTypes from 'prop-types';
+import { withThemedStyles } from '../styles/variables';
 class MenuOverlay extends Component {
   constructor(props){
     super(props);
@@ -20,7 +22,7 @@ class MenuOverlay extends Component {
     console.log('MenuOverlay component mounted');
   }
   render() {
-
+    const styles = this.props.themeStyles;
     return (
         <View style={[styles.container,this.props.overlayStyle]}>
           <View style={styles.closeButtonContainer}>
@@ -72,4 +74,27 @@ const styles = StyleSheet.create({
   }
 });
 
-export default MenuOverlay;
+export default withThemedStyles(THEME => ({
+container:{
+  left:0,
+  right:0,
+  bottom:0,
+  position:'absolute',
+  backgroundColor:THEME.mainBgColor,
+  opacity:0.95
+},
+closeButtonContainer: {
+  flexDirection: 'row',
+  justifyContent: 'flex-end',
+  borderTopColor:  THEME.contentBorderColor,
+  borderTopWidth: 1,
+  height:35,
+  borderBottomColor: THEME.contentBorderColor,
+  borderBottomWidth:1,
+  paddingRight:10
+},
+closeButtonText:{
+  color:THEME.mainHighlightColor,
+  textAlign:'right',
+  lineHeight:25
+}}))(MenuOverlay);
