@@ -30,7 +30,7 @@ class MenuOverlay extends Component {
               underlayColor="transparent"
               style={styles.closeButton}>
                 <AppText bold={true} style={styles.closeButtonText}>
-                {(this.props.closeLabel || 'Choose')}
+                {(this.props.closeLabel || 'Close')}
                 </AppText>
             </TouchableOpacity>
           </View>

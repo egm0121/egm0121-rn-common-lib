@@ -1,22 +1,21 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
 import {
-  AppRegistry,
   StyleSheet,
-  Text,
   View,
   TouchableOpacity,
-  PickerIOS
 } from 'react-native';
-import THEME from '../styles/variables';
+import { withThemedStyles } from '../styles/variables';
 import AppText from './appText';
-export default function(props){
+
+function MenuOverlayItem(props){
+  const styles = props.themeStyles;
   return <View style={[styles.itemContainer,props.containerStyle]}>
     <TouchableOpacity onPress={props.onPress}>
       <AppText bold={true} style={[styles.itemText,props.textStyle]}>{props.children}</AppText>
     </TouchableOpacity>
   </View>;
 }
-let styles =  StyleSheet.create({
+export default withThemedStyles(THEME => StyleSheet.create({
   itemContainer:{
     padding:20,
     alignItems:'center',
@@ -27,4 +26,5 @@ let styles =  StyleSheet.create({
     fontSize:17,
     color:THEME.mainHighlightColor
   }
-});
+}))(MenuOverlayItem);
+

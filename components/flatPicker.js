@@ -37,13 +37,11 @@ class FlatPicker extends Component {
     const selectedStyle = isSelected ? [styles.selectedOption] :[];
     const selectedTextStyle =  isSelected ? [styles.selectedOptionText] :[];
     return <View style={[styles.optionRow,selectedStyle]} >
-          <View style={{flexDirection:'column',flex:1}} >
-          <TouchableOpacity onPress={this.onOptionPress.bind(this,rowData.value)}>
-            <AppText bold={true} style={[styles.itemText, selectedTextStyle]} >
+          <TouchableOpacity style={styles.touchable} onPress={this.onOptionPress.bind(this,rowData.value)}>
+            <AppText bold={true} style={[styles.itemText, selectedTextStyle]} numberOfLines={1} ellipsizeMode={'tail'} >
               {rowData.label}
             </AppText>
           </TouchableOpacity>
-        </View>
       </View>;
   }
   render() {
@@ -82,7 +80,11 @@ const mapThemeToStyles = (THEME) => {
       bottom:0,
       position:'absolute',
       backgroundColor:THEME.mainBgColor,
-      opacity:0.95
+      opacity: 0.95
+    },
+    touchable: {
+      flex: 1,
+      alignItems: 'center'
     },
     itemText : {
       color: THEME.mainColor,
@@ -91,7 +93,7 @@ const mapThemeToStyles = (THEME) => {
     optionRow: {
       flexDirection: 'row',
       paddingVertical: 10,
-      paddingHorizontal: 20
+      paddingHorizontal: 20,
     },
     closeButtonContainer: {
       flexDirection: 'row',
