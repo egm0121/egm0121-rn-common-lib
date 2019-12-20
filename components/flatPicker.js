@@ -14,17 +14,23 @@ import {
 } from 'react-native';
 import THEME from '../styles/variables';
 import MenuOverlay from './menuOverlay';
+import FilterInput from './filterInput';
 import AppText from './appText';
 import { withThemedStyles } from '../styles/variables';
 
 class FlatPicker extends Component {
   constructor(props){
     super(props);
+    this.state = { filterValue:'' };
     this.onOptionPress = this.onOptionPress.bind(this);
     this.renderRowWithData = this.renderRowWithData.bind(this);
+    this.onFilterTextChange = this.onFilterTextChange.bind(this);
   }
   componentDidMount(){
     console.log('FlatPicker component mounted');
+  }
+  onFilterTextChange(value){
+    this.setState({filterValue: value})
   }
   onOptionPress(value) {
     this.props.onValueChange(value);
@@ -45,14 +51,17 @@ class FlatPicker extends Component {
       </View>;
   }
   render() {
-    // this.props.selected
-    // this.props.onValueChange
-    // this.props.options[{value,label}]
     return (
       <MenuOverlay {...this.props}>
+         <FilterInput
+            placeholder={this.props.filterPlaceholder}
+            value={this.state.filterValue}
+            onChangeText={this.onFilterTextChange}
+            onClearFilter={this.onFilterTextChange.bind(this,'')}
+            />
          <FlatList 
           extraData={this.props.selected}
-          data={this.props.options}
+          data={this.props.options.filter(item => !this.state.filterValue || item.label.toLowerCase().indexOf(this.state.filterValue.toLowerCase()) > -1)}
           keyExtractor={(item,idx) => `${idx}` }
           renderItem={this.renderRowWithData}
         />
@@ -62,7 +71,7 @@ class FlatPicker extends Component {
 }
 
 FlatPicker.defaultProps = {
-
+  filterPlaceholder: 'Search'
 };
 FlatPicker.propTypes = {
   options : PropTypes.arrayOf(PropTypes.object),
@@ -76,7 +85,7 @@ const mapThemeToStyles = (THEME) => {
     container:{
       left:0,
       right:0,
-      height:250,
+      height:300,
       bottom:0,
       position:'absolute',
       backgroundColor:THEME.mainBgColor,
