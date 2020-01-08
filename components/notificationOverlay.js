@@ -9,7 +9,8 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import { withThemedStyles } from '../styles/variables';
 import AppText from './appText';
@@ -23,7 +24,10 @@ const renderTypeMap = {
   },
   'success':{
     icon : '✓'
-  }
+  },
+  'loading': {
+    icon : ''
+  },
 }
 class NotificationOverlay extends Component {
   constructor(props){
@@ -41,7 +45,9 @@ class NotificationOverlay extends Component {
     const typeIcon = renderTypeMap[this.props.type].icon;
     return (
         <View style={styles.notificationContainer} >
-          <AppText style={styles.iconText}>{typeIcon}</AppText>
+          {this.props.type === 'loading' ? 
+            <ActivityIndicator animating={true} color={this.props.theme.loaderColor} style={styles.loadingIndicator} size={'large'}/> 
+          : <AppText style={styles.iconText}>{typeIcon}</AppText>}
           <AppText bold={true} style={styles.messageText}>{this.props.message}</AppText>
           {this.props.children}
         </View>
@@ -51,7 +57,8 @@ class NotificationOverlay extends Component {
 NotificationOverlay.types = {
   error : 'error',
   info : 'info',
-  success : 'success'
+  success : 'success',
+  loading : 'loading',
 };
 NotificationOverlay.renderForType = renderTypeMap;
 NotificationOverlay.defaultProps = {
@@ -86,6 +93,9 @@ const mapThemeToStyles = (THEME) => {
       fontSize:60,
       lineHeight:60,
       color: THEME.mainHighlightColor,
+    },
+    loadingIndicator:{
+      marginBottom:20,
     },
     messageText : {
       color: THEME.mainHighlightColor,

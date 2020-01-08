@@ -48,31 +48,7 @@ MenuOverlay.propTypes = {
   onClose: PropTypes.func.isRequired
 };
 
-const styles = StyleSheet.create({
-  container:{
-    left:0,
-    right:0,
-    bottom:0,
-    position:'absolute',
-    backgroundColor:THEME.mainBgColor,
-    opacity:0.95
-  },
-  closeButtonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    borderTopColor:  THEME.contentBorderColor,
-    borderTopWidth: 1,
-    height:35,
-    borderBottomColor: THEME.contentBorderColor,
-    borderBottomWidth:1,
-    paddingRight:10
-  },
-  closeButtonText:{
-    color:THEME.mainHighlightColor,
-    textAlign:'right',
-    lineHeight:25
-  }
-});
+
 
 export default withThemedStyles(THEME => ({
 container:{

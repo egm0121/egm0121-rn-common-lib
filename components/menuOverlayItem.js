@@ -11,7 +11,10 @@ function MenuOverlayItem(props){
   const styles = props.themeStyles;
   return <View style={[styles.itemContainer,props.containerStyle]}>
     <TouchableOpacity onPress={props.onPress}>
+      {props.noTextWrap ? 
+      props.children :
       <AppText bold={true} style={[styles.itemText,props.textStyle]}>{props.children}</AppText>
+      }
     </TouchableOpacity>
   </View>;
 }
