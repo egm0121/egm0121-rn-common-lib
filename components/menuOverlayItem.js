@@ -9,14 +9,13 @@ import AppText from './appText';
 
 function MenuOverlayItem(props){
   const styles = props.themeStyles;
-  return <View style={[styles.itemContainer,props.containerStyle]}>
-    <TouchableOpacity onPress={props.onPress}>
+  const disabledStyle = props.disabled ? styles.disabledItem : undefined;
+  return <TouchableOpacity  disabled={props.disabled} style={[styles.itemContainer,props.containerStyle]} onPress={props.onPress}>
       {props.noTextWrap ? 
       props.children :
-      <AppText bold={true} style={[styles.itemText,props.textStyle]}>{props.children}</AppText>
+      <AppText bold={true} style={[styles.itemText,props.textStyle,disabledStyle]}>{props.children}</AppText>
       }
-    </TouchableOpacity>
-  </View>;
+    </TouchableOpacity>;
 }
 export default withThemedStyles(THEME => StyleSheet.create({
   itemContainer:{
@@ -24,6 +23,9 @@ export default withThemedStyles(THEME => StyleSheet.create({
     alignItems:'center',
     borderBottomWidth:1,
     borderBottomColor: THEME.contentBorderColor
+  },
+  disabledItem: {
+    opacity: 0.5,
   },
   itemText:{
     fontSize:17,
