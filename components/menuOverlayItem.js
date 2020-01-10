@@ -19,7 +19,8 @@ function MenuOverlayItem(props){
 }
 export default withThemedStyles(THEME => StyleSheet.create({
   itemContainer:{
-    padding:20,
+    padding:18,
+    height:59,
     alignItems:'center',
     borderBottomWidth:1,
     borderBottomColor: THEME.contentBorderColor
