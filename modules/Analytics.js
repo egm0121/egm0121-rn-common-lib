@@ -65,7 +65,7 @@ let AnalyticsService = {
     let eventHit = new GAHits.Event(category,action,label,value);
     if(typeof dimensions == 'object'){
       eventHit.set(dimensions);
-      console.log('Serialized ga event',eventHit.toQueryString());
+      __DEV__ && console.log('Serialized ga event',eventHit.toQueryString());
     }
     this.ga.send(eventHit);
   },
