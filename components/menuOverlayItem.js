@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {
   StyleSheet,
-  View,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import { withThemedStyles } from '../styles/variables';
 import AppText from './appText';
@@ -19,7 +19,7 @@ function MenuOverlayItem(props){
 }
 export default withThemedStyles(THEME => StyleSheet.create({
   itemContainer:{
-    padding:Platform.select({ios:15,android: 18}),
+    padding: Platform.select({ios:15,android: 18}),
     height:59,
     lineHeight:40,
     alignItems:'center',
