@@ -22,9 +22,7 @@ const themeVariables = {
 
 export function setCustomTheme(customObj) {
   Object.keys(customObj).forEach(key => {
-    if( key in themeVariables ){
       themeVariables[key] = customObj[key];
-    }
   });  
 };
 
