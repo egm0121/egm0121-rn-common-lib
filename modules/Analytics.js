@@ -13,6 +13,7 @@ let AnalyticsService = {
     this.uniqueClientId = uniqClientId;
     this.trackingAppName = appName;
     this.currentRootScreen = ''; 
+    this.currentSubScreen = '';
     this.ga = new Analytics(trackerId, uniqClientId, 1, DeviceInfo.getUserAgent());
     this.processPrematureHitsQueue();
     const deviceName =  DeviceInfo.getModel().toLocaleLowerCase() !== 'iphone' 
@@ -26,8 +27,13 @@ let AnalyticsService = {
   removeSessionDimension(index){
     return this.ga.removeDimension(index);
   },
+  getCurrentDeepScreenView(){
+    if (!this.currentSubScreen) return this.currentRootScreen;
+    return [this.currentRootScreen, this.currentSubScreen].join(' - ');
+  },
   sendScreenView(screenName){
     this.currentRootScreen = screenName;
+    this.currentSubScreen = '';
     if(!this.ga){
       this.initialBuffer.push(() => this.sendScreenView(screenName));
       return false;
@@ -40,8 +46,9 @@ let AnalyticsService = {
        );
     this.ga.send(screenView);
   },
-  sendNestedScreenView(subView, async = false){
-    let screenName = [this.currentRootScreen, subView].join(' - ');
+  sendNestedScreenView(subView, async = false) {
+    this.currentSubScreen = subView;
+    let screenName = this.getCurrentDeepScreenView();
     let screenView = new GAHits.ScreenView(
       this.trackingAppName,
       screenName,

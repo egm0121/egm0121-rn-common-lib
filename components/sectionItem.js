@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   },
   iconLabel:{
     flex:1,
-    fontSize: 13,
+    fontSize: 11,
     paddingRight:0,
   },
   itemSelected:{
