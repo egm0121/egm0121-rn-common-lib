@@ -81,11 +81,11 @@ export function CacheDecorator() {
     });
   };
 
-  this.withCache = function(func, explicitId, timeout, returnClones = false){
+  this.withCache = function(func, explicitId, timeout, returnClones = false, serializer = argsSerializer){
     let id = explicitId || getUniqCacheId();
 
     return (...args) => {
-      let key = id + '-' + args.map(argsSerializer).join('-');
+      let key = id + '-' + args.map(serializer).join('-');
       let cachedVal = that.getCache(key);
 
       if (!cachedVal){

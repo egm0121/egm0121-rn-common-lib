@@ -19,9 +19,8 @@ function MenuOverlayItem(props){
 }
 export default withThemedStyles(THEME => StyleSheet.create({
   itemContainer:{
-    padding: Platform.select({ios:15,android: 18}),
-    height:59,
-    lineHeight:40,
+    paddingHorizontal: Platform.select({ios:15,android: 18}),
+    height:50,
     alignItems:'center',
     borderBottomWidth:1,
     borderBottomColor: THEME.contentBorderColor
@@ -31,6 +30,7 @@ export default withThemedStyles(THEME => StyleSheet.create({
   },
   itemText:{
     fontSize:17,
+    lineHeight:50,
     color:THEME.mainHighlightColor
   }
 }))(MenuOverlayItem);
