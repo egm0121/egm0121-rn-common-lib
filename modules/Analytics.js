@@ -55,8 +55,8 @@ let AnalyticsService = {
       DeviceInfo.getReadableVersion(),
       DeviceInfo.getBundleId()
     );
-    if(async){ 
-      setTimeout(() => this.ga.send(screenView),100)
+    if (async) { 
+      setTimeout(() => this.ga.send(screenView),500);
     } else {
       this.ga.send(screenView);
     }
