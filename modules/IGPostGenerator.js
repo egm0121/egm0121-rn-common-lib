@@ -27,7 +27,15 @@ class IGPostGenerator {
 
   async fetchTrendingForCountry(countryCode) {
     return this.getScreenshot(
-      `http://www.splitcloud-app.com/trendingPost.html?region=${countryCode}`,
+      `http://www.splitcloud-app.com/chartPostGenerator.html?region=${countryCode}&kind=trending`,
+      1080,
+      1350
+    );
+  }
+
+  async fetchPopularForCountry(countryCode) {
+    return this.getScreenshot(
+      `http://www.splitcloud-app.com/chartPostGenerator.html?region=${countryCode}&kind=popular`,
       1080,
       1350
     );
