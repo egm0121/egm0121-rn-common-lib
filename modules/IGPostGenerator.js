@@ -52,7 +52,7 @@ class IGPostGenerator {
       'trending': 'fetchTrendingForCountry',
       'popular': 'fetchPopularForCountry'
     };
-    const postGeneratorMethod = this[mapToMethod].bind(this);
+    const postGeneratorMethod = this[mapToMethod[type]].bind(this);
     const screenshotsPromises = countryCodeArr.map(countryCode =>
       postGeneratorMethod(countryCode).then(imageResp => ({
         blob: imageResp.data,
