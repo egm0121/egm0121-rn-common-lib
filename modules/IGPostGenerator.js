@@ -47,9 +47,14 @@ class IGPostGenerator {
       960,
     );
   }
-  async generateTrendingPostsForCountries(countryCodeArr) {
+  async generateChartPostsForCountries(countryCodeArr, type = 'trending') {
+    const mapToMethod = {
+      'trending': 'fetchTrendingForCountry',
+      'popular': 'fetchPopularForCountry'
+    };
+    const postGeneratorMethod = this[mapToMethod].bind(this);
     const screenshotsPromises = countryCodeArr.map(countryCode =>
-      this.fetchTrendingForCountry(countryCode).then(imageResp => ({
+      postGeneratorMethod(countryCode).then(imageResp => ({
         blob: imageResp.data,
         countryCode,
       }))
