@@ -98,7 +98,9 @@ class FilterInput extends Component{
            <TouchableOpacity onPress={this.props.onClearFilter} >
              <Text style={styles.clearActionText}>✕</Text>
            </TouchableOpacity>
-         </View> :  null}
+         </View> : <View style={[styles.clearAction]}>
+           {this.props.placeholderComponent}
+         </View>}
          <TextInput
            style={inputStyle}
            placeholder={this.props.placeholder}
@@ -111,7 +113,9 @@ class FilterInput extends Component{
        </View>);
   }
 }
-
+FilterInput.defaultProps = {
+  placeholderComponent: null,
+};
 FilterInput.propTypes = {
   onClearFilter: PropTypes.func
 };

@@ -2,24 +2,30 @@ import {
   Analytics,
   Hits as GAHits
 } from 'react-native-google-analytics';
-import DeviceInfo from 'react-native-device-info';
 
-let uniqClientId = DeviceInfo.getUniqueID();
 
 let AnalyticsService = {
   ga : null,
   initialBuffer : [],
-  initialize(trackerId,appName){
-    this.uniqueClientId = uniqClientId;
+  initialize(trackerId, appName, config){
+    this.uniqueClientId = config.uniqueClientId;
     this.trackingAppName = appName;
+    this.config = config;
     this.currentRootScreen = ''; 
     this.currentSubScreen = '';
-    this.ga = new Analytics(trackerId, uniqClientId, 1, DeviceInfo.getUserAgent());
+    this.ga = new Analytics(trackerId, this.uniqueClientId, 1, this.config.userAgent);
     this.processPrematureHitsQueue();
-    const deviceName =  DeviceInfo.getModel().toLocaleLowerCase() !== 'iphone' 
-      ? DeviceInfo.getModel() : DeviceInfo.getDeviceId();
-    console.log('analytics detected deviceName:',deviceName, 'uid:', uniqClientId);
-    this.addSessionDimension(4, deviceName);
+    const deviceName = this.config.deviceModelName.toLocaleLowerCase() !== 'iphone' 
+      ? this.config.deviceModelName : this.config.deviceModelId;
+    console.log('analytics detected deviceName:', deviceName, 'uid:', this.uniqueClientId);
+    if (this.config.deviceNameCustomDimensionIdx >= 0) {
+      console.log('Include tracking of device Name via custom dimension');
+      this.addSessionDimension(this.config.deviceNameCustomDimensionIdx, deviceName);
+    }
+    if (this.config.deviceIdCustomDimensionIdx >= 0){
+      console.log('Include tracking of unique device id via custom dimension');
+      this.addSessionDimension(this.config.deviceIdCustomDimensionIdx, this.uniqueCliendId);
+    }
   },
   addSessionDimension(index,value){
     return this.ga.addDimension(index,value);
@@ -39,11 +45,11 @@ let AnalyticsService = {
       return false;
     }
     let screenView = new GAHits.ScreenView(
-         this.trackingAppName,
-         screenName,
-         DeviceInfo.getReadableVersion(),
-         DeviceInfo.getBundleId()
-       );
+      this.trackingAppName,
+      screenName,
+      this.config.appReadableVersion,
+      this.config.appBundleId
+    );
     this.ga.send(screenView);
   },
   sendNestedScreenView(subView, async = false) {
@@ -52,8 +58,8 @@ let AnalyticsService = {
     let screenView = new GAHits.ScreenView(
       this.trackingAppName,
       screenName,
-      DeviceInfo.getReadableVersion(),
-      DeviceInfo.getBundleId()
+      this.config.appReadableVersion,
+      this.config.appBundleId
     );
     if (async) { 
       setTimeout(() => this.ga.send(screenView),500);
