@@ -5,14 +5,16 @@ class IGPostGenerator {
     this.apiBase = 'https://api.rasterwise.com/v1';
     this.apiKey = apiKey;
   }
-
-  async getScreenshot(url, width, height) {
+  async getScreenshotPayload( url, width, height, qs = ''){
     const screenshotURL = `${this.apiBase}/get-screenshot?apikey=${
       this.apiKey
-    }&url=${encodeURIComponent(url)}&height=${height}&width=${width}`;
+    }&url=${encodeURIComponent(url)}&height=${height}&width=${width}${qs}`;
     console.log('getting screenshot from service', url);
     const screenshotResp = await axios({ method: 'GET', url: screenshotURL });
-    console.log('got screenshot data from service', screenshotResp.data);
+    return screenshotResp.data;
+  }
+  async getScreenshot(url, width, height) {
+    const screenshotResp = await this.getScreenshotPayload( url, width, height)
     const scImagePath = screenshotResp.data.screenshotImage;
     return axios({ method: 'GET', responseType: 'arraybuffer', url: scImagePath });
   }
