@@ -109,6 +109,7 @@ class FilterInput extends Component{
            {...this.props}
            onBlur={this._onBlur}
            onFocus={this._onFocus}
+           ref={this.props.inputRef}
          />
        </View>);
   }
