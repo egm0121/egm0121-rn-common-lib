@@ -54,14 +54,14 @@ let AnalyticsService = {
   },
   sendNestedScreenView(subView, async = false) {
     this.currentSubScreen = subView;
-    let screenName = this.getCurrentDeepScreenView();
-    let screenView = new GAHits.ScreenView(
-      this.trackingAppName,
-      screenName,
-      this.config.appReadableVersion,
-      this.config.appBundleId
-    );
     if (async) { 
+      let screenName = this.getCurrentDeepScreenView();
+      let screenView = new GAHits.ScreenView(
+        this.trackingAppName,
+        screenName,
+        this.config.appReadableVersion,
+        this.config.appBundleId
+      );
       setTimeout(() => this.ga.send(screenView),500);
     } else {
       this.ga.send(screenView);

@@ -15,7 +15,7 @@ class IGPostGenerator {
   }
   async getScreenshot(url, width, height) {
     const screenshotResp = await this.getScreenshotPayload( url, width, height)
-    const scImagePath = screenshotResp.data.screenshotImage;
+    const scImagePath = screenshotResp.screenshotImage;
     return axios({ method: 'GET', responseType: 'arraybuffer', url: scImagePath });
   }
 
